@@ -61,3 +61,72 @@ print(df.info())
 # Generating the statistics of the hotel booking dataset
 print(df.describe())
 print(df.describe().T)  # Transposed the dataset
+
+# Creating data frame from Dictionary of lists
+hotels_dict = {
+    'hotel_name': ["The Merrion Hotel", "Glenlo Abbey Hotel", "Conrad Dublin"],
+    'location': ["Dublin", "Galway", "Dublin"],
+    'rating': ["9.8", "9.1", "8.5"]
+}
+# Convert dict into dataframe
+hotels_ire = pd.DataFrame(hotels_dict)
+
+# print the dataframe
+print(hotels_ire)
+
+# Checking if there are any nulls or missing values in the dataset
+print(df.isna().any())
+print(df.isnull().sum())
+
+# Dropping columns and handling missing value columns from the dataset
+
+df = df.drop(['agent', 'company'], axis=1)
+
+# Listing unique values in each column using for loop
+for u in df.columns:
+    print(df[u].unique(), "Column_name:", u)
+
+df['country'].fillna('XXX', inplace=True)
+
+df['children'].fillna('0', inplace=True)
+
+# Check to see if there are any nulls or missing value in the dataset
+print(df.isnull().sum())
+
+# Drop the duplicates from the dataset and reset the index
+df = df.drop_duplicates().reset_index(drop=True)
+print(df)
+print(df['hotel'].value_counts())
+Max_lead_time = df['lead_time'].max()
+# check the max lead time bookings have
+print(Max_lead_time)
+
+# Indexed and Sorted
+sort_df = df.loc[:, ("hotel", "arrival_date_week_number")]
+sort_df = sort_df.sort_values('arrival_date_week_number', ascending=False)
+print(sort_df)
+
+# grouped by hotel
+grouped_df = df.groupby('hotel')[['is_canceled']].sum()
+print(grouped_df)
+
+# Importing data using API https://apipheny.io/free-api/
+
+url = 'https://datausa.io/api/data?drilldowns=Nation&measures=Population'
+api_response = requests.get(url)
+
+print(api_response)
+
+api_data = api_response.json()
+
+print(api_data)
+
+for k, v in api_data.items():
+    print(k + ':', v)
+
+# Access and process the data as needed
+for item in api_data['data']:
+    nation = item['Nation']
+    population = item['Population']
+    year = item['Year']
+    print(nation, population, year)

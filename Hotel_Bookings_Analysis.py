@@ -162,3 +162,64 @@ hotel_lead_time = df.groupby('hotel')['lead_time'].agg([min, max, np.mean, np.me
 print(hotel_lead_time)
 # get count based on reservation status
 print(df.reservation_status.value_counts())
+
+# Visualize using bar chart whether booking was cancelled or not and its count
+a = df['deposit_type'].value_counts().plot(kind='bar')
+plt.show()
+
+# Merge sample hotel data generated
+sample1 = {
+    'booking_id': ['1', '2', '3', '4'],
+    'hotel': ['hotel 1', 'hotel 2', 'hotel 3', 'hotel 4'],
+    'Location': ['India', 'New york', 'Dublin', 'Lisbon']
+}
+df1 = pd.DataFrame(sample1)
+print(df1)
+
+sample2 = {
+    'booking_id': ['1', '2', '3', '4'],
+    'prices': ['250', '500', '300', '200'],
+    'Room_type': ['Single', 'penthouse', 'double', 'double'],
+    'Location': ['India', 'New york', 'Dublin', 'Lisbon']
+    }
+df2 = pd.DataFrame(sample2)
+print(df2)
+
+merged_data = pd.merge(df1, df2, how='inner', on='booking_id', suffixes=('_df1', '_df2'))
+print(merged_data)
+print(df1.merge(df2, on='booking_id'))  # give similar output
+
+# Analyze hotel bookings made every month
+hotel_bookings = df.groupby('arrival_date_month', sort=True)['hotel'].count()
+hotel_bookings.plot(kind='bar', x='Month', y='Number of reservations', title='Hotel Bookings by Month')
+plt.show()
+
+# Analyze booking distribution channel
+
+distribution_channel = df.groupby('distribution_channel')['hotel'].count()
+distribution_channel.plot(kind='pie', title='Booking Distribution channel')
+plt.show()
+
+
+# Analyze hotel booking cancellations overall
+
+booking_cancellation = df.groupby('is_canceled')['hotel'].count()
+sns.barplot(x=booking_cancellation.index, y=booking_cancellation.values)
+plt.xlabel('Booking Cancellations yes(1) or No(0)')
+plt.ylabel('Count of bookings')
+plt.title('Hotel Booking Cancellations')
+plt.show()
+
+# Analyze length in stay
+df['total_length_of_stay'] = df['stays_in_weekend_nights']+df['stays_in_week_nights']
+plt.hist(df['total_length_of_stay'], bins=20)
+plt.xlabel('Total_Length_stay')
+plt.ylabel('Bookings')
+plt.title('Length of Stay in Hotels')
+plt.show()
+
+# Analyze mean rate for hotel bookings
+adr = df.groupby('hotel')['adr'].mean()
+print(adr)
+adr.plot(kind='bar')
+plt.show()

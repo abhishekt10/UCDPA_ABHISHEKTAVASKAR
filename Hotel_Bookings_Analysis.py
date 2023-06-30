@@ -130,3 +130,35 @@ for item in api_data['data']:
     population = item['Population']
     year = item['Year']
     print(nation, population, year)
+
+
+# Group by hotel and arrival year and calculate total guests
+print(df.columns)
+print(df.dtypes)
+df['total_guests'] = df['adults']+df['babies']
+print(df[['total_guests', 'hotel']])
+total_hotel_guests = df.groupby(['arrival_date_year', 'hotel'])['total_guests'].sum()
+print(total_hotel_guests)
+
+# Filtered data for non cancelled bookings and grouped by arrival week with calc of total guests
+data = df.loc[(df['is_canceled'] == 0)]
+sorted_data = data.groupby('arrival_date_week_number', as_index=False)['total_guests'].sum()\
+    .sort_values(by='total_guests', ascending=False)
+print(sorted_data)
+sns.barplot(data=sorted_data, x='arrival_date_week_number', y='total_guests', order=sorted_data
+            .sort_values('total_guests', ascending=False).arrival_date_week_number)
+plt.show()
+# custom function to convert date to datetime
+
+
+def dateformat(column):
+    return max(pd.to_datetime(column))
+
+
+print(dateformat(df['reservation_status_date']))
+
+# get min max mean median using np function
+hotel_lead_time = df.groupby('hotel')['lead_time'].agg([min, max, np.mean, np.median])
+print(hotel_lead_time)
+# get count based on reservation status
+print(df.reservation_status.value_counts())

@@ -145,8 +145,8 @@ data = df.loc[(df['is_canceled'] == 0)]
 sorted_data = data.groupby('arrival_date_week_number', as_index=False)['total_guests'].sum()\
     .sort_values(by='total_guests', ascending=False)
 print(sorted_data)
-sns.barplot(data=sorted_data, x='arrival_date_week_number', y='total_guests', order=sorted_data
-            .sort_values('total_guests', ascending=False).arrival_date_week_number)
+sns.barplot(data=sorted_data, x='arrival_date_week_number', y='total_guests',
+            order=sorted_data.sort_values('total_guests', ascending=False).arrival_date_week_number)
 plt.show()
 # custom function to convert date to datetime
 
@@ -163,8 +163,9 @@ print(hotel_lead_time)
 # get count based on reservation status
 print(df.reservation_status.value_counts())
 
-# Visualize using bar chart whether booking was cancelled or not and its count
-a = df['deposit_type'].value_counts().plot(kind='bar')
+# Visualize using bar chart to depict booking deposit type
+a = df['deposit_type'].value_counts().plot(kind='bar', xlabel='deposit_type', ylabel='bookings',
+                                           title='Booking Deposit Type')
 plt.show()
 
 # Merge sample hotel data generated
@@ -197,7 +198,7 @@ plt.show()
 # Analyze booking distribution channel
 
 distribution_channel = df.groupby('distribution_channel')['hotel'].count()
-distribution_channel.plot(kind='pie', title='Booking Distribution channel')
+distribution_channel.plot(kind='pie', title='Booking Distribution Channel')
 plt.show()
 
 
@@ -224,7 +225,7 @@ plt.show()
 # Analyze mean rate for hotel bookings
 adr = df.groupby('hotel')['adr'].mean()
 print(adr)
-adr.plot(kind='bar')
+adr.plot(kind='bar', xlabel='hotel_type', ylabel='avg_daily_rate', title='Avg Daily Rate by Hotel Type')
 plt.show()
 
 

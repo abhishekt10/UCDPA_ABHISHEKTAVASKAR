@@ -204,11 +204,14 @@ plt.show()
 # Analyze hotel booking cancellations overall
 
 booking_cancellation = df.groupby('is_canceled')['hotel'].count()
-sns.barplot(x=booking_cancellation.index, y=booking_cancellation.values)
+ax = sns.barplot(x=booking_cancellation.index, y=booking_cancellation.values)
 plt.xlabel('Booking Cancellations yes(1) or No(0)')
 plt.ylabel('Count of bookings')
 plt.title('Hotel Booking Cancellations')
+for i in ax.containers:
+    ax.bar_label(i,)
 plt.show()
+
 
 # Analyze length in stay
 df['total_length_of_stay'] = df['stays_in_weekend_nights']+df['stays_in_week_nights']
@@ -223,3 +226,6 @@ adr = df.groupby('hotel')['adr'].mean()
 print(adr)
 adr.plot(kind='bar')
 plt.show()
+
+
+
